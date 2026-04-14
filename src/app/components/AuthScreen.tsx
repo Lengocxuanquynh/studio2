@@ -271,7 +271,7 @@ export function AuthScreen() {
         transition={{ delay: 2 }}
       >
         <p style={{ fontFamily: 'Montserrat, sans-serif', color: '#3A5050', fontSize: '9px', letterSpacing: '0.1em' }}>
-          Demo: mật khẩu là "{project.password}"
+          Demo: mật khẩu là &quot;{project.password}&quot;
         </p>
       </motion.div>
     </div>

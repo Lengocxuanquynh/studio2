@@ -2,7 +2,7 @@ import { createDraftPost, listPublishedPosts } from "@/server/repositories/post-
 
 export async function getPublishedPostCards() {
   const posts = await listPublishedPosts();
-  return posts.map((post) => ({
+  return posts.map((post: (typeof posts)[number]) => ({
     id: post.id,
     title: post.title,
     slug: post.slug,

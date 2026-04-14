@@ -218,7 +218,7 @@ export function ClientGallery() {
           transition={{ duration: 1, delay: 0.3 }}
         >
           <p style={{ fontFamily: 'Playfair Display, serif', color: '#8A9E9E', fontSize: '16px', fontWeight: 400, fontStyle: 'italic', lineHeight: 1.8 }}>
-            "{project.description}"
+            &quot;{project.description}&quot;
           </p>
           <div className="w-12 h-px mx-auto mt-6" style={{ backgroundColor: 'rgba(234,230,216,0.15)' }} />
         </motion.div>
