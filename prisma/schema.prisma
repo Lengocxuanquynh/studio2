@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  passwordHash String?
+  name        String?
+  role        Role      @default(VIEWER)
+  posts       Post[]
+  media       MediaAsset[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Post {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  title       String
+  excerpt     String?
+  content     String
+  status      PostStatus  @default(DRAFT)
+  publishedAt DateTime?
+  author      User?       @relation(fields: [authorId], references: [id])
+  authorId    String?
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  tags        PostTag[]
+  seoMeta     SeoMeta?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  posts     PostTag[]
+  createdAt DateTime @default(now())
+}
+
+model PostTag {
+  postId String
+  tagId  String
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+}
+
+model MediaAsset {
+  id         String   @id @default(cuid())
+  publicId   String   @unique
+  secureUrl  String
+  width      Int?
+  height     Int?
+  format     String?
+  bytes      Int?
+  altText    String?
+  owner      User?    @relation(fields: [ownerId], references: [id])
+  ownerId    String?
+  createdAt  DateTime @default(now())
+}
+
+model SeoMeta {
+  id          String   @id @default(cuid())
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String   @unique
+  title       String?
+  description String?
+  canonical   String?
+  noIndex     Boolean  @default(false)
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String
+  payload    Json?
+  createdAt  DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum PostStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
